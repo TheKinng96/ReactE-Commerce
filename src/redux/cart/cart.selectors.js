@@ -1,5 +1,6 @@
 // memorise selector, else the state will be fired repeatedly, nothing will be stored
-
+// however refreshing browser will clear up the data
+// selector increases the performance of the website speed
 import { createSelector } from 'reselect';
 
 // input selector: doesnt use react selector
