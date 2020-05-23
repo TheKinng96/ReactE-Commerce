@@ -1,5 +1,6 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
+// redirect is used to direct the user if they are log in
 import { connect } from 'react-redux';
 
 import HomePage from './pages/homepage/homepage.component';
@@ -42,12 +43,18 @@ class App extends React.Component{
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
-          <Route path='/signin' component={SignInAndSignUpPage} />
+          <Route path='/signin' render={() => this.props.currentUser ? (<Redirect to='/' />): (<SignInAndSignUpPage />)} />
         </Switch>
       </div>
     );
   }
 }
+
+// get user from redux state for redirecting
+// from user reducer gets currentUser info
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+})
 
 // dispatch: for redux to know that whatever you passing me is
 // going to be an action object that I'm going to pass to every reducer
@@ -58,4 +65,4 @@ const mapDispatchToProps = dispatch =>({
 })
 
 // app.js doesnt need any state from reducer: null #1
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
