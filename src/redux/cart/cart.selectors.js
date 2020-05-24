@@ -2,10 +2,10 @@
 // however refreshing browser will clear up the data
 // selector increases the performance of the website speed
 import { createSelector } from 'reselect';
-
+// output selector: use react
 // input selector: doesnt use react selector
 const selectCart = state => state.cart;
-// output selector: use react
+
 
 
 export const selectCartItems = createSelector (
@@ -14,6 +14,11 @@ export const selectCartItems = createSelector (
 );
 // 1st: collection of an array of input selectors
 // 2nd: a func which return the value we want
+
+export const selectCartHidden = createSelector(
+  [selectCart],
+  cart => cart.hidden
+)
 
 export const selectCartItemsCount = createSelector(
   [selectCartItems],
@@ -25,3 +30,13 @@ export const selectCartItemsCount = createSelector(
       )
   
 )
+
+export const selectCartTotal = createSelector (
+  [selectCartItems],
+  cartItems => 
+    cartItems.reduce(
+      (accumulatedQuantity, cartItem) => 
+        accumulatedQuantity + cartItem.quantity * cartItem.price,
+        0
+    )
+);
