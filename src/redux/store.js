@@ -6,7 +6,11 @@ import logger from 'redux-logger';
 import rootReducer from './root-reducer';
 // store is expecting the middleware is going to be an array
 
-const middlewares = [logger];
+const middlewares = [];
+
+if (process.env.NODE_ENV === 'development') {
+  middlewares.push[logger];
+}
 
 export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
