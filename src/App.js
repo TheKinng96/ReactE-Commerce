@@ -15,11 +15,13 @@ import { selectCurrentUser } from './redux/user/user.selectors'
 
 import CheckoutPage from './pages/checkout/checkout.component'
 
+
 class App extends React.Component{
   unsubscribeFromAuth = null
 
   componentDidMount() {
     const { setCurrentUser } = this.props;
+
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
@@ -31,7 +33,7 @@ class App extends React.Component{
           });
         });
       }
-    setCurrentUser(userAuth)
+    setCurrentUser(userAuth);
     });
   }
 
@@ -58,8 +60,8 @@ class App extends React.Component{
 // get user from redux state for redirecting
 // from user reducer gets currentUser info
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
-})
+  currentUser: selectCurrentUser,
+});
 
 // dispatch: for redux to know that whatever you passing me is
 // going to be an action object that I'm going to pass to every reducer
@@ -67,7 +69,7 @@ const mapStateToProps = createStructuredSelector({
 // invoking setCurrentUser with the user that will then be used as the payload 
 const mapDispatchToProps = dispatch =>({
   setCurrentUser: user => dispatch(setCurrentUser(user))
-})
+});
 
 // app.js doesnt need any state from reducer: null #1
 export default connect(mapStateToProps, mapDispatchToProps)(App);
