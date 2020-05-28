@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './root-reducer';
 // store is expecting the middleware is going to be an array
 
-const middlewares = [];
+const middlewares = [thunk];
 
 if (process.env.NODE_ENV === 'development') {
   middlewares.push(logger);

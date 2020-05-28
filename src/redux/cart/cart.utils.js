@@ -1,7 +1,5 @@
 // utility functions: keep files clean and organize funcitons that we may need in multiple files in one location
 
-import CartItem from "../../components/cart-item/cart-item.component";
-
 export const addItemToCart = (cartItems, cartItemToAdd) => {
   const existingCartItem = cartItems.find(cartItem => cartItem.id === cartItemToAdd.id);
   // check if the item has ald in the cart
