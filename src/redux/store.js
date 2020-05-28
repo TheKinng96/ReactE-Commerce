@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import { persistStore } from 'redux-persist';
 import logger from 'redux-logger';
-
+import thunk from 'redux-thunk';
 // middleware catches the action, console logs it out and it moves along
 import rootReducer from './root-reducer';
 // store is expecting the middleware is going to be an array

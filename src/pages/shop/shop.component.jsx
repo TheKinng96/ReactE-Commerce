@@ -1,62 +1,41 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 import CollectionsOverview from '../../components/collection-overview/collection-overview.component'
 import CollectionPage from '../collection/collection.component';
-import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase.utils'
-import { updateCollections } from '../../redux/shop/shop.actions'
+import { fetchCollectionStartAsync } from '../../redux/shop/shop.actions'
+import { selectIsCollectionFetching } from '../../redux/shop/shop.selectore'
 import WithSpinner from '../../components/with-spinner/with-spinner.component'
 
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
 const CollectionPageWithSpinner = WithSpinner(CollectionPage);
 
 class ShopPage extends React.Component {
-  state = {
-    loading:true
-  };
-
-  unsubscribeFromSnapshot = null;
-
   componentDidMount () {
-    const { updateCollections } = this.props;
-    const collectionRef = firestore.collection('collections');
+    const { fetchCollectionStartAsync } = this.props;
+    fetchCollectionStartAsync();
 
-    // method 1: firebase only
-    this.unsubscribeFromSnapshot = collectionRef.onSnapshot(async snapshot =>{ 
-      const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-      updateCollections(collectionsMap);
-      this.setState({loading:false});
-    });
-
-    //method 2 for non firebase API
-    // collectionRef.get().then(snapshot =>{ 
-    //   const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-    //   updateCollections(collectionsMap);
-    //   this.setState({loading:false});
-    // });
-
-    //method 3: fetching
-    // fetch('https://firestore.googleapis.com/v1/projects/kinngstore-7c58c/databases/(default)/documents/collections')
-    // .then(response => response.json())
-    // .then(collections => console.log(collections));
-    //very nesty to get the item value and id...
   }
 
   render() {
-    const { match } = this.props;
-    const { loading } = this.state; 
+    const { match,isCollectionFetching } = this.props;
     return(
       <div className='shop-page'>
-        <Route exact path={`${match.path}`} render={(props) => <CollectionsOverviewWithSpinner isLoading={loading} {...props}/>} />
-        <Route path={`${match.path}/:collectionId`} render={(props) => <CollectionPageWithSpinner isLoading={loading} {...props}/>} />
+        <Route exact path={`${match.path}`} render={(props) => <CollectionsOverviewWithSpinner isLoading={isCollectionFetching} {...props}/>} />
+        <Route path={`${match.path}/:collectionId`} render={(props) => <CollectionPageWithSpinner isLoading={isCollectionFetching} {...props}/>} />
       </div>
     );
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  isCollectionFetching: selectIsCollectionFetching
+})
+
 const mapDispatchToProps = dispatch => ({
-  updateCollections: collectionsMap => dispatch(updateCollections(collectionsMap))
+  fetchCollectionStartAsync: () => dispatch(fetchCollectionStartAsync())
 })
 
 export default connect(null,mapDispatchToProps)(ShopPage);
