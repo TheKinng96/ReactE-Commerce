@@ -3,22 +3,26 @@ import { withRouter } from 'react-router-dom';
 
 //withRouter will powerup the function, let the props can be accessed anywhere from the route
 
-import './menu-item.styles.scss'
+import {
+  MenuItemContainer,
+  BackgroundImageContainer,
+  ContentContainer,
+  ContentTitle,
+  ContentSubtitle
+} from './menu-item.styles';
 
 const MenuItem = ({ title, imageUrl, size, history, linkUrl, match }) => (
-  <div className={`${size} menu-item`} onClick={() => history.push(`${match.url}${linkUrl}`)}>
+  <MenuItemContainer size={size} onClick={() => history.push(`${match.url}${linkUrl}`)}>
     {/* to clarify which link to direct to, match is needed for the linkUrl */}
-      <div 
+      <BackgroundImageContainer 
         className="background-image" 
-        style={{
-          backgroundImage: `url(${imageUrl})`
-        }}
+        imageUrl={imageUrl}
       />
-      <div className="content">
-          <h1 className="title">{title.toUpperCase()}</h1>
-          <span className="subtitle">GET NOW</span>
-      </div>
-  </div>
+      <ContentContainer>
+          <ContentTitle>{title.toUpperCase()}</ContentTitle>
+          <ContentSubtitle>GET NOW</ContentSubtitle>
+      </ContentContainer>
+  </MenuItemContainer>
 );
 
 export default withRouter(MenuItem);
