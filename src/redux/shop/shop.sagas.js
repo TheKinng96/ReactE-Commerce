@@ -1,6 +1,7 @@
-import { takeEvery, call,put } from 'redux-saga/effects';
+import { takeLatest, call,put } from 'redux-saga/effects';
 //call: invokes methods, when a took too long then b
 //put: creating action
+//takeLatest: call api one time
 
 import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase.utils'
 
@@ -44,5 +45,5 @@ export function* fetchCollectionsAsync() {
 }
 
 export function* fetchCollectionsStart(){
-  yield takeEvery(ShopActionTypes.FETCH_COLLECTIONS_START, fetchCollectionsAsync);
+  yield takeLatest(ShopActionTypes.FETCH_COLLECTIONS_START, fetchCollectionsAsync);
 }
